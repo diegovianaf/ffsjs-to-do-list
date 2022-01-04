@@ -16,7 +16,7 @@ body {
   height: 100vh;
   font-size: 16px; /* padrão */
   background-color: #c0f5f5;
-  color: white;
+  color: #fff;
   font-family: "Roboto Condensed", Arial, sans-serif;
   line-height: 1.3;
 }
@@ -92,7 +92,7 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 25%;
-  background-color: aquamarine;
+  background-color: #65ffcc;
 }
 
 /* .by Thiago - não funcionou aqui */
@@ -111,7 +111,7 @@ body {
   right: 20px;
   border: none;
   outline: none;
-  background-color: red;
+  background-color: #da0202;
   font-weight: bold;
   border-radius: 50%;
   width: 20px;
@@ -123,7 +123,7 @@ body {
 
 .wrapper-list ul.list li button.remove::after {
   content: 'x';
-  color: white;
+  color: #fff;
   display: block;
 }
 
@@ -139,7 +139,7 @@ body {
   padding: 20px;
   font-family: "Roboto Condensed", Arial, sans-serif;
   font-size: 1.2em;
-  color: white;
+  color: #fff;
 }
 
 /* 
