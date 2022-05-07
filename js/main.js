@@ -1,119 +1,146 @@
-
 const Main = {
+
+  tasks: [],
 
   init: function() {
     this.cacheSelectors()
     this.bindEvents()
+    this.getStoraged()
+    this.buildTasks()
   },
 
-  // seleciona e armazena os eventos
-  cacheSelectors: function() { 
-    this.$checkButtons = document.querySelectorAll('.check') 
+  cacheSelectors: function() {
+    this.$checkButtons = document.querySelectorAll('.check')
     this.$inputTask = document.querySelector('#inputTask')
     this.$list = document.querySelector('#list')
     this.$removeButtons = document.querySelectorAll('.remove')
   },
 
-  // eventos de atividade, como cliques...
-  bindEvents: function(){
-    const self = this 
-    // para que o button.onclick abaixo funcione
+  bindEvents: function() {
+    const self = this
 
     this.$checkButtons.forEach(function(button){
-      button.onclick = self.Events.checkButton_click
+      button.onclick = self.Events.checkButton_click.bind(self)
     })
 
     this.$inputTask.onkeypress = self.Events.inputTask_keypress.bind(this)
 
     this.$removeButtons.forEach(function(button){
-      button.onclick = self.Events.removeButton_click
+      button.onclick = self.Events.removeButton_click.bind(self)
     })
   },
 
-  // funções relacionadas aos eventos by me
-  Events: {
-    checkButton_click: function(e){
-      const li = e.target.parentElement
+  getStoraged: function() {
+    const tasks = localStorage.getItem('tasks')
 
-      li.classList.toggle('done')
-      li.classList.toggle('task')
+    if (tasks) {
+      this.tasks = JSON.parse(tasks)
+    } else {
+      localStorage.setItem('tasks', JSON.stringify([]))
+    }
+  },
+
+  getTaskHtml: function(task, isDone) {
+    return `
+      <li class="${isDone ? 'done' : ''}" data-task="${task}">          
+        <div class="check" ></div>
+        <label class="task">
+          ${task}
+        </label>
+        <button class="remove"></button>
+      </li>
+    `
+  },
+
+  insertHTML: function(element, htmlString) {
+    element.innerHTML += htmlString
+
+    this.cacheSelectors()
+    this.bindEvents()
+  },
+
+  buildTasks: function() {
+    let html = ''
+
+    this.tasks.forEach(item => {
+      html += this.getTaskHtml(item.task, item.done)
+    })
+
+    this.insertHTML(this.$list, html)
+  },
+
+  Events: {
+    checkButton_click: function(e) {
+      const li = e.target.parentElement
+      const value = li.dataset['task']
+      const isDone = li.classList.contains('done')
+
+      const newTasksState = this.tasks.map(item => {
+        if (item.task === value) {
+          item.done = !isDone
+        }
+
+        return item
+      })
+
+      localStorage.setItem('tasks', JSON.stringify(newTasksState))
+
+      if (!isDone) {
+        return li.classList.add('done')       
+      }
+
+      li.classList.remove('done')
     },
 
-    inputTask_keypress: function(e){
+    inputTask_keypress: function(e){      
       const key = e.key
       const value = e.target.value
+      const isDone = false
 
       if (key === 'Enter') {
-        this.$list.innerHTML += `
-          <li>
-            <div class="check"></div>
-            <label clas="task">
-              ${value}
-            </label>
-            <button class="remove"></button>
-          </li>
-        `
+        const taskHtml = this.getTaskHtml(value, isDone)
 
-        e.target.value = ''
+        this.insertHTML(this.$list, taskHtml)
 
-        this.cacheSelectors()
-        this.bindEvents()
+        e.target.value = ''        
+
+        const savedTasks = localStorage.getItem('tasks')
+        const savedTasksArr = JSON.parse(savedTasks)        
+
+        const arrTasks = [
+          { task: value, done: isDone },
+          ...savedTasksArr,
+        ]
+
+        const jsonTasks = JSON.stringify(arrTasks)
+
+        this.tasks = arrTasks
+        localStorage.setItem('tasks', jsonTasks)
       }
     },
 
     removeButton_click: function(e){
-      let li = e.target.parentElement
+      const li = e.target.parentElement
+      const value = li.dataset['task']  
+      
+      console.log(this.tasks)
 
-      li.classList.add('hidden')
+      const newTasksState = this.tasks.filter(item => {
+        console.log(item.task, value)
+        return  item.task !== value
+      })
 
-      /* li.classList.add('removed')
+      localStorage.setItem('tasks', JSON.stringify(newTasksState))
+      this.tasks = newTasksState
+
+      li.classList.add('removed')
 
       setTimeout(function(){
         li.classList.add('hidden')
-      }, 300) */
+      }, 300)
     }
   }
+
 }
 
-Main.init() 
-// para executar a função
-
-// funções relacionadas a eventos - By Thiago
-  /* Events: {
-    checkButton_click: function(e) {
-      const li = e.target.parentElement
-      const itsDone = li.classList.contains('done')
-
-      if (!itsDone) {
-        return li.classList.add('done')
-      }
-      li.classList.remove('done')
-    }
-  }, */
-
-
-
-// this. coloca a variável no main para ficar disponível em outras funções.. se usasse o let, só poderia utilizar-lo na função atual
-
-// .bind(this) para conectar o this com o inputTask_keypress e funcionar na função do evento
-
-// e.target.value = '' para limpar o campo
-
-// this.cacheSelectors() e this.bindEvents() para manter as funções aplicadas
-
-// usar alert('ok) para verificar se a função está funcionando
-
-// usar console.log(this) para saber quem é o this naquele contexto
-
-/* 
-usar console.log(e) na [função(e)] para saber onde está o elemento para aplicar a função no comando. Ex: 
-
-  Events: {
-    checkButton_click: function(e) {
-      // console.log(e.target.parentElement)
-      const li = e.target.parentElement
-    }
-  }
-*/
-
-// variáveis html com $ na frente (boa prática)
+Main.init()
