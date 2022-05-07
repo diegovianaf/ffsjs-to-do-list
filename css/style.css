@@ -5,16 +5,14 @@
 * {
   margin: 0;
   padding: 0;
-  /* box-sizing: border-box; */
 }
 
 body {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  align-items: center; /* só funciona quando a tela tem altura definida */
+  align-items: center;
   height: 100vh;
-  font-size: 16px; /* padrão */
   background-color: #c0f5f5;
   color: #fff;
   font-family: "Roboto Condensed", Arial, sans-serif;
@@ -40,7 +38,7 @@ body {
 }
 
 .wrapper-list ul.list li {
-  position: relative; /* para alinhar com o button.remove */
+  position: relative;
   background-color: #262e4c;
   border-bottom: 1px solid #1c2340;
   display: flex;
@@ -48,10 +46,6 @@ body {
   padding: 20px;
   transition: background-color 200ms ease;
 }
-
-/* .wrapper-list ul.list li.removed {
-  animation: collapseItem 300ms ease;
-} */
 
 .wrapper-list ul.list li.hidden {
   display: none;
@@ -66,7 +60,7 @@ body {
 }
 
 .wrapper-list ul.list li .check {
-  position: relative; /* relativo ao pai dele, o .done */
+  position: relative;
   background-color: #404a6e;
   border-radius: 25%;
   width: 20px;
@@ -75,8 +69,6 @@ body {
   cursor: pointer;
   transition: background-color 200ms ease;
 }
-
-/* class done aplicada no js */
 
 .wrapper-list ul.list .check:hover,
 .wrapper-list ul.list .done .check {
@@ -95,13 +87,7 @@ body {
   background-color: #65ffcc;
 }
 
-/* .by Thiago - não funcionou aqui */
-/* .wrapper-list ul.list .done .task {
-  text-decoration: line-through;
-} */
-
-/* usei essa para ser aplicada com toggle no js */
-.wrapper-list ul.list .task {
+.wrapper-list ul.list .done .task {
   text-decoration: line-through;
 }
 
@@ -117,7 +103,7 @@ body {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  opacity: 0; /* sumir e só aparecer quando passar o mouse no li:hover com opacity 1 */
+  opacity: 0;
   transition: opacity 200ms ease;
 }
 
@@ -141,13 +127,3 @@ body {
   font-size: 1.2em;
   color: #fff;
 }
-
-/* 
-@keyframes collapseItem {
-  0% {
-    transform: rotateX(0deg);
-  }
-  100% {
-    transform: rotateX(-90deg);
-  }
-} */
